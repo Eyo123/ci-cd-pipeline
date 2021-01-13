@@ -1,5 +1,6 @@
 <application>
   <component name="LafManager">
+    //ok//
     <laf class-name="com.intellij.ide.ui.laf.darcula.DarculaLaf" />
   </component>
 </application>
