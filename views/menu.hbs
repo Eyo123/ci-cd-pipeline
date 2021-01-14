@@ -1,0 +1,240 @@
+
+
+<head>
+
+    <h1>UNIVERSITY OF PLYMOUTH COVID-19 STUDENT CLASSIFICATION </h1>
+    <meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <a href="http://localhost:8000/"> Websocket App Link </a>
+
+
+
+
+
+
+    <script>
+
+        var result = "";
+
+        $(window).on("load", function() {
+            $("#reset").click(function(){
+                $("#date").html("");
+                $("#temperature").val("");
+                $("#output").html("");
+                $("#output").css("background-color","#ffffff");
+
+            });
+
+
+
+            $("#check").click(function() {
+
+
+                        enabledreset();
+                        var case1="";
+                        var case2="";
+                        var date= new Date();
+                        var month=date.getMonth()+1;
+                        var year=date.getFullYear();
+
+                        var day=date.getDate();
+
+                        var Stringdate= year + "-" + month +"-0" + day;
+                        $("#date").html(Stringdate);
+                        let temperature = $("#temperature").val();
+
+                        if ($('input[type=checkbox]').prop('checked')){
+
+                            temperature=f2c(temperature);
+                        }
+
+
+
+
+                        if (temperature < 33) {
+                            case1= "Not positive/low temperature";
+                            case2="Free";
+                            $("#output").html(case1);
+                            $("#statue").html(case1);
+                            $("#output").css("background-color", "#0af3ff");
+
+                        }
+
+
+
+                        else if (temperature < 38){
+                            case1="Not positive/Excellent condition";
+                            case2="Free";
+                            $("#output").html(case1);
+                            $("#statue").html(case1);
+                            $("#output").css("background-color", "#24ff0f");
+
+
+                        }
+                        else if (temperature < 43){
+                            case1="Covid-19 : positive/normal case";
+                            case2="2 weeks Home ";
+                            $("#output").html(case1);
+                            $("#statue").html(case1);
+                            $("#output").css("background-color", "#FBFF2E");
+
+
+                        }
+                        else  {
+                            case1="Covid-19 : Positive/dangerous case";
+                            case2=" Urgent state / Hospital confinement";
+                            $("#output").html(case1);
+                            $("#statue").html(case1);
+                            $("#output").css("background-color", "#FF0309");
+                        }
+
+
+                        valStatue(case1);
+
+
+
+                    }
+
+
+
+
+
+            );
+
+
+
+
+
+
+
+
+        } );
+
+
+
+
+
+
+        function enabledreset(){
+            document.getElementById("reset").disabled=false;
+
+        }
+        function valStatue(x){
+            document.getElementById("statue").value=x;
+
+        }
+        function valconfinement(x){
+            document.getElementById("confinement").value=x;
+
+        }
+        function f2c(temp){
+            var c= (temp-32)*5/9;
+            return c;
+        }
+
+    </script>
+</head>
+
+
+
+
+
+
+
+        <section class="covid">
+            <h3>Covid Test</h3>
+            <input type="text" id="temperature" value="Enter Student temperature">
+            <input type="checkbox" id="fahrenheit" >
+            <label for="fahrenheit" id="fahrenheit_lbl">Fahrenheit</label>
+            <p id="output"></p>
+            <p id="date"></p>
+            <button id="check" >Check student temperature</button>
+            <button id="reset" disabled="reset">Reset ALL </button>
+        </section>
+
+
+
+
+
+        <section class="insert">
+              <h3>Add New Student Covid Profile </h3>
+             <form action="/insert" method="post">
+              <div class="input">
+              <label for="name">Student Name</label>
+              <input type="text" id="name" name="name">
+              </div>
+              <div class="input">
+              <label for="address">Address</label>
+              <input type="text" id="address" name="address">
+              </div>
+              <div class="input">
+              <label for="statue">statue</label>
+              <input type="text" id="statue" name="statue" value="" >
+              </div>
+              <button type="submit">INSERT</button>
+              </form>
+        </section>
+
+
+
+
+        <section class="get">
+            <h3>Load List of student Covid Data</h3>
+            <a href="/get-data">Display Student Data</a>
+            <div>
+           {{# each items }}
+            <article class="item">
+                <div>Student Name: {{ this.name }}</div>
+                <div>Address: {{ this.address }}</div>
+                <div>statue: {{ this.statue }}</div>
+                <div>Date: {{ this.date_doc }}</div>
+                <div>ID: {{ this._id }}</div>
+            </article>
+           {{/each}}
+            </div>
+        </section>
+
+
+
+        <section class="update">
+              <h3>Update List of student covid Data</h3>
+              <form action="/update" method="post">
+             <div class="input">
+             <label for="id">ID</label>
+             <input type="text" id="id" name="id">
+             </div>
+            <div class="input">
+            <label for="name">Student Name</label>
+            <input type="text" id="name" name="name">
+            </div>
+            <div class="input">
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address">
+            </div>
+            <div class="input">
+            <label for="statue">statue</label>
+
+            <select name="statue" >
+                <option value="Not positive/low temperature" >Not positive/low temperature</option>
+                <option value="Not positive/Excellent condition">Not positive/Excellent condition</option>
+                <option value="Covid-19 : positive/normal case" >Covid-19 : positive/normal case</option>
+                <option value="Covid-19 : Positive/dangerous case" >Covid-19 : Positive/dangerous case</option>
+            </select>
+            </div>
+            <button type="submit">UPDATE</button>
+            </form>
+        </section>
+        </section>
+
+
+
+        <section class="delete">
+            <h3>Delete Student Data</h3>
+            <form action="/delete" method="post">
+            <div class="input">
+            <label for="id">ID</label>
+            <input type="text" id="id" name="id">
+            </div>
+            <button type="submit">DELETE</button>
+            </form>
+        </section>
