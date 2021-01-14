@@ -8,6 +8,7 @@ var url= 'mongodb+srv://Mop:REAL123456789@cluster0.xucpe.mongodb.net/test?retryW
 
 
 router.get('/', function(req, res, next) {
+    
     res.render('menu');
 });
 
